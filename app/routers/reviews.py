@@ -1,0 +1,41 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List
+
+from app import crud, schemas
+from app.database import get_db
+
+router = APIRouter(
+    prefix="/reviews",
+    tags=["reviews"]
+)
+# Tüm yorumları listeleme
+@router.get("/", response_model=List[schemas.Review])
+def read_reviews(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_reviews(db, skip=skip, limit=limit)
+
+# ID'ye göre tek bir yorumu getirme kısmı
+@router.get("/{review_id}", response_model=schemas.Review)
+def read_review(review_id: int, db: Session = Depends(get_db)):
+    review = crud.get_review(db, review_id=review_id)
+    if review is None:
+        raise HTTPException(status_code=404, detail="Değerlendirme bulunamadı")
+    return review
+# Yeni yorum ekleme ksımı
+@router.post("/", response_model=schemas.Review, status_code=status.HTTP_201_CREATED)
+def create_review(review: schemas.ReviewCreate, db: Session = Depends(get_db)):
+    return crud.create_review(db=db, review=review)
+# Yorum silme
+@router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_review(review_id: int, db: Session = Depends(get_db)):
+    success = crud.delete_review(db=db, review_id=review_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Değerlendirme bulunamadı")
+    return None
+# Yorum güncelleme ( PATCH - sadece gönderilen alanı günceller)
+@router.patch("/{review_id}", response_model=schemas.Review)
+def update_review(review_id: int, review_update: schemas.ReviewUpdate, db: Session = Depends(get_db)):
+    updated = crud.update_review(db=db, review_id=review_id, review_update=review_update)
+    if updated is None:
+        raise HTTPException(status_code=404, detail="Değerlendirme bulunamadı")
+    return updated

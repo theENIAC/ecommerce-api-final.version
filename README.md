@@ -29,6 +29,7 @@ CI/CD: GitHub Actions + Codecov (otomatik test ve coverage raporu)
 https://github.com/theENIAC/ecommerce-api-final.version
 
 cd ecommerce-api-final.version
+
 3. **Sanal ortam oluşturma ve aktif etme**
 python -m venv venv
 

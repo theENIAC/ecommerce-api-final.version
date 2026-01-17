@@ -42,7 +42,7 @@ class Category(CategoryBase):
 # product şemaları 
 class ProductBase(BaseModel):
     name: str
-    price: int
+    price: float
     category_id: int
 
 class ProductCreate(ProductBase):

@@ -56,7 +56,7 @@ def test_create_category_and_product(client):
     cat_id = cat_resp.json()["id"]
     
     # üRÜN oluşturma kategoriye bağlı bi şekilde 
-    prod_resp = client.post("/products/", json={"name": "Phone", "price": 1000, "category_id": cat_id})
+    prod_resp = client.post("/products/", json={"name": "CPU", "price": 3426, "category_id": cat_id})
     assert prod_resp.status_code == 201
     assert prod_resp.json()["category_id"] == cat_id
 
@@ -68,7 +68,7 @@ def test_create_order_with_products(client):
     # Kategori ve ürün eklenmesi
     cat_resp = client.post("/categories/", json={"name": "Tech"})
     cat_id = cat_resp.json()["id"]
-    prod_resp = client.post("/products/", json={"name": "Laptop", "price": 2000, "category_id": cat_id})
+    prod_resp = client.post("/products/", json={"name": "Gaming Headset", "price": 7999, "category_id": cat_id})
     prod_id = prod_resp.json()["id"]
     
     # Ürün içieren sipariş oluşturma testi
@@ -86,17 +86,17 @@ def test_get_order_not_found(client):
 def test_create_review(client):
     # Yorum yazabilmek için ürün oluşturulur
     cat_resp = client.post("/categories/", json={"name": "Games"})
-    prod_resp = client.post("/products/", json={"name": "Game", "price": 60, "category_id": cat_resp.json()["id"]})
+    prod_resp = client.post("/products/", json={"name": "Battlefield", "price": 40, "category_id": cat_resp.json()["id"]})
     prod_id = prod_resp.json()["id"]
     
     # Yorum ekleme 
-    review_resp = client.post("/reviews/", json={"text": "Awesome!", "product_id": prod_id})
+    review_resp = client.post("/reviews/", json={"text": "Best fps game ever!", "product_id": prod_id})
     assert review_resp.status_code == 201
 
 def test_delete_product(client):
     # Ürün silme testini yapabilmek için ürün oluşturma kısmı
-    cat = client.post("/categories/", json={"name": "Tools"})
-    prod = client.post("/products/", json={"name": "Hammer", "price": 50, "category_id": cat.json()["id"]})
+    cat = client.post("/categories/", json={"name": "OEM"})
+    prod = client.post("/products/", json={"name": "Asus", "price": 510, "category_id": cat.json()["id"]})
     prod_id = prod.json()["id"]
     
     # Silme
@@ -108,5 +108,5 @@ def test_delete_product(client):
     assert get_resp.status_code == 404
 
 def test_invalid_request_bad_json(client):
-    response = client.post("/users/", json={"username": "bad"})  # email eksik
+    response = client.post("/users/", json={"username": "asdasd"})  # email eksik
     assert response.status_code == 422  # Validation error (zorunlu alan eksik gönderirse doğrulama hatası)

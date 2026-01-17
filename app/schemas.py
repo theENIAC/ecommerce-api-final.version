@@ -88,8 +88,6 @@ class OrderBase(BaseModel):
 class OrderCreate(OrderBase):
     product_ids: List[int] = []
 
-class OrderUpdate(OrderBase):
-    product_ids: Optional[List[int]] = None
 
 class Order(OrderBase):
     id: int

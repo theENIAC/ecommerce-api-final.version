@@ -13,7 +13,7 @@ from fastapi import status
 def test_full_user_to_order_flow(client):
     """Senaryo 1: Kullanıcı kaydı → Ürün ekleme → Sipariş oluşturma"""
     # Kullanıcı oluştur
-    user_resp = client.post("/users/", json={"username": "e2e_buyer", "email": "buyer@example.com"})
+    user_resp = client.post("/users/", json={"username": "kagan", "email": "kagan@example.com"})
     assert user_resp.status_code == status.HTTP_201_CREATED
     user_id = user_resp.json()["id"]
 
@@ -23,7 +23,7 @@ def test_full_user_to_order_flow(client):
     cat_id = cat_resp.json()["id"]
 
     # Ürün oluştur
-    prod_resp = client.post("/products/", json={"name": "E2E Laptop", "price": 5000, "category_id": cat_id})
+    prod_resp = client.post("/products/", json={"name": "E2E Monster", "price": 2343, "category_id": cat_id})
     assert prod_resp.status_code == 201
     prod_id = prod_resp.json()["id"]
 
@@ -38,7 +38,7 @@ def test_full_user_to_order_flow(client):
     order_data = get_order.json()
     assert order_data["user_id"] == user_id
     assert len(order_data["products"]) == 1
-    assert order_data["products"][0]["name"] == "E2E Laptop"
+    assert order_data["products"][0]["name"] == "E2E Monster"
 
 def test_product_full_crud_cycle(client):
     """Senaryo 2: Ürün listeleme → Detay → Güncelleme → Silme"""
@@ -46,7 +46,7 @@ def test_product_full_crud_cycle(client):
     cat = client.post("/categories/", json={"name": "CRUD Cat"}).json()["id"]
 
     # Ürün oluşturma
-    create = client.post("/products/", json={"name": "Old Name", "price": 100, "category_id": cat})
+    create = client.post("/products/", json={"name": "msi", "price": 100, "category_id": cat})
     assert create.status_code == 201
     prod_id = create.json()["id"]
 
@@ -58,12 +58,12 @@ def test_product_full_crud_cycle(client):
     # Detay görüntüleme
     detail = client.get(f"/products/{prod_id}")
     assert detail.status_code == 200
-    assert detail.json()["name"] == "Old Name"
+    assert detail.json()["name"] == "msi"
 
     # Güncelleme
-    update = client.patch(f"/products/{prod_id}", json={"name": "New Name", "price": 200})
+    update = client.patch(f"/products/{prod_id}", json={"name": "msigm20", "price": 200})
     assert update.status_code == 200
-    assert update.json()["name"] == "New Name"
+    assert update.json()["name"] == "msigm20"
 
     # Silme
     delete = client.delete(f"/products/{prod_id}")
@@ -95,9 +95,9 @@ def test_multiple_products_in_order(client):
     user = client.post("/users/", json={"username": "multi_buyer", "email": "multi@example.com"}).json()["id"]
     cat = client.post("/categories/", json={"name": "Multi Cat"}).json()["id"]
     # Birden fazla ürün oluştur
-    prod1 = client.post("/products/", json={"name": "Item1", "price": 100, "category_id": cat}).json()["id"]
-    prod2 = client.post("/products/", json={"name": "Item2", "price": 200, "category_id": cat}).json()["id"]
-    prod3 = client.post("/products/", json={"name": "Item3", "price": 300, "category_id": cat}).json()["id"]
+    prod1 = client.post("/products/", json={"name": "Gaming Mouse", "price": 100, "category_id": cat}).json()["id"]
+    prod2 = client.post("/products/", json={"name": "RGB Mouse", "price": 200, "category_id": cat}).json()["id"]
+    prod3 = client.post("/products/", json={"name": "Macro Mouse", "price": 300, "category_id": cat}).json()["id"]
     
     #Tüm ürünlerle siparis oluştur
     order = client.post("/orders/", json={"user_id": user, "product_ids": [prod1, prod2, prod3]})
@@ -105,20 +105,20 @@ def test_multiple_products_in_order(client):
     data = order.json()
     assert len(data["products"]) == 3
     product_names = {p["name"] for p in data["products"]}
-    assert "Item1" in product_names
-    assert "Item2" in product_names
-    assert "Item3" in product_names
+    assert "Gaming Mouse" in product_names
+    assert "RGB Mouse" in product_names
+    assert "Macro Mouse" in product_names
 
 def test_complex_interaction_all_resources(client):
     """Senaryo 5: Tüm kaynaklarla kompleks akış"""
     # BU testte sistemdeki tüm temel işlemler birlikte denenmektedir
     # Kullanıcı + Kategori + Ürün + Yorum + Sipariş
     user = client.post("/users/", json={"username": "complex_user", "email": "complex@example.com"}).json()["id"]
-    cat = client.post("/categories/", json={"name": "Complex Cat"}).json()["id"]
-    prod = client.post("/products/", json={"name": "Ultimate Product", "price": 9999, "category_id": cat}).json()["id"]
+    cat = client.post("/categories/", json={"name": "Ultra Quality"}).json()["id"]
+    prod = client.post("/products/", json={"name": "OLED", "price": 9999, "category_id": cat}).json()["id"]
 
     # Ürüne yorum ekle
-    client.post("/reviews/", json={"text": "Hayatımın ürünü!", "product_id": prod})
+    client.post("/reviews/", json={"text": "Siyahlar ne kadar da siyah !", "product_id": prod})
 
     # Sipariş ver
     order = client.post("/orders/", json={"user_id": user, "product_ids": [prod]})

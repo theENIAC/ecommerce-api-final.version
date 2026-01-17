@@ -69,9 +69,9 @@ def test_create_category_crud(db_session: Session):
     assert cat.name == "Electronics"
 
 def test_create_product_crud(db_session: Session):
-    # Önce kategori oluşturulur (foreign key için gerekli)
+    # Önce kategori oluşturulur (foreign key için gerekli) (fk id)
     cat = crud.create_category(db=db_session, category=schemas.CategoryCreate(name="Cat"))
-    prod_in = schemas.ProductCreate(name="Mouse", price=200, category_id=cat.id)
+    prod_in = schemas.ProductCreate(name="RGB Mouse", price=200, category_id=cat.id)
     prod = crud.create_product(db=db_session, product=prod_in)
     assert prod.id is not None
 
@@ -109,10 +109,10 @@ def test_create_order_with_products_crud(db_session: Session):
     assert order.products[0].name == "Keyboard"
 
 # NEGATİF / Basit Manuel Kontroller
-# burada temel mantıksal kontroller yapıldı
+# burada temel mantıksal kontroller yapıldı (örneğim eposta doğrulaması) format kontrolü
 def test_manual_validation_email():
-    assert "@" in "good@example.com"
-    assert "@" not in "badmail"
+    assert "@" in "kullanici@test.com"
+    assert "@" not in "patladi"
 
 def test_manual_price_positive():
     assert 5000 > 0

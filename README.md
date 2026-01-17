@@ -33,6 +33,7 @@ python -m venv venv
 
 Windows için:
 .\venv\Scripts\activate
+
 Mac/Linux için:
 source venv/bin/activate
 

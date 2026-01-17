@@ -82,7 +82,7 @@ def test_update_user_crud(db_session: Session):
     
     # Kullanıcı bilgilerini güncelle
     update_data = schemas.UserUpdate(username="newname", email="new@example.com")
-    updated = crud.update_user(db=db_session, user_id=user.id, user_update=update_data)  # <--- BURASI DEĞİŞTİ!
+    updated = crud.update_user(db=db_session, user_id=user.id, user_update=update_data)  # Güncelleme ile değişti (hata ayıklama)
     
     assert updated is not None
     assert updated.username == "newname"

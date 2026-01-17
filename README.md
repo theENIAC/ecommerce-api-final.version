@@ -28,8 +28,14 @@ CI/CD: GitHub Actions + Codecov (otomatik test ve coverage raporu)
 1. **Repoyu klonlama** (GitHub'dan indirin):
 https://github.com/theENIAC/ecommerce-api-final.version
 cd ecommerce-api-final.version
-2. **Sanal ortam oluşturun ve aktif etme**
+2. *Sanal ortam oluşturma ve aktif etme**
 python -m venv venv
+
+# Windows için:
+.\venv\Scripts\activate
+# Mac/Linux için:
+source venv/bin/activate
+
 3. **Gerekli kütüphaneleri yükleme** :
 pip install -r requirements.txt
 4. **Uygulamayı çalıştırma** (FastAPI sunucusu başlar):

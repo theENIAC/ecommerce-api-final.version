@@ -173,7 +173,7 @@ PATCH /orders/{order_id}
 Açıklama: Sipariş durumunu günceller.
 Örnek:
 {
-  "status": "shipped"
+  "status": "processing"
 }
 
 

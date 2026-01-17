@@ -50,7 +50,7 @@ class ProductCreate(ProductBase):
 
 class ProductUpdate(ProductBase):
     name: Optional[str] = None
-    price: Optional[int] = None
+    price: Optional[float] = None
     category_id: Optional[int] = None
 
     class Config:
